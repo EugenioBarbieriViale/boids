@@ -1,3 +1,8 @@
+/* TODO:
+ * - move draw_flock in loop of rules
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -7,7 +12,7 @@
 #define W 1000
 #define H 800
 
-#define N 15
+#define N 30
 #define size 30
 
 #define square(x) (x)*(x)
@@ -61,8 +66,9 @@ void cohesion(int i, Boid flock[]) {
 
 void rules(int index, Boid flock[]) {
     for (int i=0; i<N; i++) {
-        float d = distance(b.pos, flock[i].pos);
-        if (d <= 50 && b.pos.x != flock[i].pos.x && b.pos.y != flock[i].pos.y) {
+        Boid current = flock[index];
+        float d = distance(current.pos, flock[i].pos);
+        if (d <= 50 && current.pos.x != flock[i].pos.x && current.pos.y != flock[i].pos.y) {
             separation(index, flock);
             alignment(index, flock);
             cohesion(index, flock);
