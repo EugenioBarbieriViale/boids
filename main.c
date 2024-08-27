@@ -62,16 +62,22 @@ void alignment(int index, Boid flock[], Boid locals[]) {
 }
 
 void cohesion(int index, Boid flock[], Boid locals[]) {
-    float avg_angle = 0;
+    Vector2 steering = {0,0};
     int c = 0;
-    for (int i=0; locals[i].angle != 0; i++) {
-    /* for (int i=0; i < N; i++) { */
-        avg_angle += locals[i].angle;
+    for (int i=0; (locals[i].vel.x != 0 && locals[i].vel.y != 0); i++) {
+        steering.x += locals[i].vel.x;
+        steering.y += locals[i].vel.y;
         c++;
     }
-    avg_angle /= c;
-    printf("%f\n", avg_angle);
-    flock[index].angle += (avg_angle - flock[index].angle);
+    steering.x /= c;
+    steering.y /= c;
+
+    steering.x -= flock[index].vel.x;
+    steering.y -= flock[index].vel.y;
+
+    flock[index].vel = steering;
+    /* flock[index].vel = update_vel(flock[index].angle, magnitude(avg_vel)); */
+    /* flock[index].pos = move(flock[index].pos, avg_vel); */
 }
 
 void init_locals(Boid locals[]) {
@@ -108,7 +114,7 @@ void draw_flock(Boid flock[]) {
         float a = flock[i].angle - PI/2;
 
         /* flock[i].angle += 0.01; */
-        flock[i].vel = update_vel(flock[i].angle, magnitude(vel));
+        /* flock[i].vel = update_vel(flock[i].angle, magnitude(vel)); */
         flock[i].pos = move(pos, vel);
 
         Vector2 v1 = (Vector2){pos.x + size*cos(a), pos.y - size*sin(a)};
