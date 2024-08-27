@@ -12,7 +12,7 @@
 #define W 1000
 #define H 800
 
-#define N 30
+#define N 40
 #define size 30
 
 #define square(x) (x)*(x)
@@ -55,25 +55,50 @@ void init_flock(Boid flock[]) {
     }
 }
 
-void separation(int i, Boid flock[]) {
+void separation(int index, Boid flock[], Boid locals[]) {
 }
 
-void alignment(int i, Boid flock[]) {
+void alignment(int index, Boid flock[], Boid locals[]) {
 }
 
-void cohesion(int i, Boid flock[]) {
+void cohesion(int index, Boid flock[], Boid locals[]) {
+    float avg_angle = 0;
+    int c = 0;
+    for (int i=0; locals[i].angle != 0; i++) {
+    /* for (int i=0; i < N; i++) { */
+        avg_angle += locals[i].angle;
+        c++;
+    }
+    avg_angle /= c;
+    printf("%f\n", avg_angle);
+    flock[index].angle += (avg_angle - flock[index].angle);
+}
+
+void init_locals(Boid locals[]) {
+    for (int i=0; i<N; i++) {
+        locals[i].pos = (Vector2){0,0};
+        locals[i].angle = 0;
+        locals[i].vel = (Vector2){0,0};
+    }
 }
 
 void rules(int index, Boid flock[]) {
+    Boid current = flock[index];
+    Boid locals[N];
+    init_locals(locals);
+
+    int c = 0;
     for (int i=0; i<N; i++) {
-        Boid current = flock[index];
         float d = distance(current.pos, flock[i].pos);
-        if (d <= 50 && current.pos.x != flock[i].pos.x && current.pos.y != flock[i].pos.y) {
-            separation(index, flock);
-            alignment(index, flock);
-            cohesion(index, flock);
+        if (d <= 60 && current.pos.x != flock[i].pos.x && current.pos.y != flock[i].pos.y) {
+            locals[c] = flock[i];
+            c++;
         }
     }
+
+    separation(index, flock, locals);
+    alignment(index, flock, locals);
+    cohesion(index, flock, locals);
 }
 
 void draw_flock(Boid flock[]) {
