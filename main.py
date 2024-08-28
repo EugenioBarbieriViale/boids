@@ -12,15 +12,18 @@ X, Y = 1200, 1000
 screen = pygame.display.set_mode([X,Y])
 pygame.display.set_caption("Flocking simulation")
 
-N = 50
+N = 200
 
 flock = []
 for i in range(N):
     pos = pygame.math.Vector2(random() * X, random() * Y)
-    vel = pygame.math.Vector2(uniform(-1.0,1.0) * 3, uniform(-1.0,1.0) * 3)
-    size = 30
 
-    current = boid.Boid(pos, vel, size)
+    maxspeed = 6
+    vel = pygame.math.Vector2(uniform(-1.0,1.0) * maxspeed, uniform(-1.0,1.0) * maxspeed)
+
+    size = 20
+
+    current = boid.Boid(pos, vel, maxspeed, size)
     flock.append(current)
 
 while True:
@@ -33,9 +36,8 @@ while True:
 
     for i in range(N):
         flock[i].get_locals(flock)
-        flock[i].alignment()
 
-        # flock[i].borders(X, Y)
+        flock[i].borders(X, Y)
         flock[i].move()
         flock[i].draw_boid(screen)
 
