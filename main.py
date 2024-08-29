@@ -1,3 +1,5 @@
+# OPTIMIZATION: quadtree / spatial subdivision
+
 import pygame, sys
 from random import random, uniform
 
@@ -12,7 +14,7 @@ X, Y = 1200, 1000
 screen = pygame.display.set_mode([X,Y])
 pygame.display.set_caption("Flocking simulation")
 
-N = 200
+N = 100
 
 flock = []
 for i in range(N):

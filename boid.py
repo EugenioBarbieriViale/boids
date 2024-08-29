@@ -19,9 +19,9 @@ class Boid:
             mate = flock[i]
 
             if self.pos != mate.pos:
-                d = pygame.math.Vector2.distance_to(self.pos, mate.pos)
+                self.distance = pygame.math.Vector2.distance_to(self.pos, mate.pos)
 
-                if d <= self.perception:
+                if self.distance <= self.perception:
                     self.locals.append(mate)
 
     def alignment(self):
@@ -37,7 +37,9 @@ class Boid:
 
             steering.scale_to_length(self.maxspeed)
             steering -= self.vel
-            steering *= self.maxforce
+
+            if steering.magnitude() >= self.maxforce:
+                steering.scale_to_length(self.maxforce)
 
         return steering
 
@@ -56,7 +58,9 @@ class Boid:
             steering.scale_to_length(self.maxspeed)
 
             steering -= self.vel
-            steering *= self.maxforce
+
+            if steering.magnitude() >= self.maxforce:
+                steering.scale_to_length(self.maxforce)
 
         return steering
 
@@ -65,18 +69,18 @@ class Boid:
         count = 0
 
         for i in range(len(self.locals)):
-            steering += self.locals[i].pos
+            steering += ((self.pos - self.locals[i].pos) / self.distance)
             count += 1
 
         if count > 0:
             steering /= count
-            steering -= self.pos
-            steering *= -1
 
             steering.scale_to_length(self.maxspeed)
 
             steering -= self.vel
-            steering *= self.maxforce
+
+            if steering.magnitude() >= self.maxforce:
+                steering.scale_to_length(self.maxforce * 1.2)
 
         return steering
 

@@ -1,6 +1,4 @@
-# boids
-https://www.red3d.com/cwr/boids/
+# Flocking simulation
+With a simple set of rules (alignment, cohesion and separation) it is possible to simulate the behaviour of flocks of birds or schools of fishes. This algorithm was invented by Craig Reynolds.
 
-https://cs.stanford.edu/people/eroberts/courses/soco/projects/2008-09/modeling-natural-systems/boids.html
-
-https://natureofcode.com/autonomous-agents/
+![More information here][https://www.red3d.com/cwr/boids/]
